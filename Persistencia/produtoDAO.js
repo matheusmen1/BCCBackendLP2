@@ -1,6 +1,7 @@
 //DAO - Data Access Object
-import Categoria from "../Modelo/categoria.js";
 import Produto from "../Modelo/produto.js";
+import Categoria from "../Modelo/categoria.js";
+
 import conectar from "./Conexao.js";
 export default class ProdutoDAO {
     constructor() {
@@ -22,8 +23,8 @@ export default class ProdutoDAO {
                 prod_dataValidade DATE NOT NULL,
                 fk_codigo_cat INT NOT NULL,
                 CONSTRAINT pk_produto PRIMARY KEY(prod_codigo),
-                CONSTRAINT fk_categoria FOREIGN KEY(fk_codigo_cat) REFERENCES categoria(codigo)
-            );
+                CONSTRAINT fk_categoria FOREIGN KEY(fk_codigo_cat) REFERENCES categoria(codigo) 
+            )
         `;
             await conexao.execute(sql);
             await conexao.release();
@@ -37,7 +38,7 @@ export default class ProdutoDAO {
         if (produto instanceof Produto) {
             const conexao = await conectar();
             const sql = `INSERT INTO produto(prod_descricao,prod_precoCusto,prod_precoVenda,prod_qtdEstoque,prod_urlImagem,prod_dataValidade, fk_codigo_cat)
-                values(?,?,?,?,?,str_to_date(?,'%d/%m/%Y'), ?)
+                values(?,?,?,?,?,str_to_date(?,'%d/%m/%Y'),?)
             `;
             let parametros = [
                 produto.descricao,
@@ -68,7 +69,6 @@ export default class ProdutoDAO {
                 produto.dataValidade,
                 produto.categoria.codigo,
                 produto.codigo
-                
             ]; //dados do produto
             await conexao.execute(sql, parametros);
             await conexao.release(); //libera a conexão
@@ -80,20 +80,21 @@ export default class ProdutoDAO {
         let sql = "";
         let parametros = [];
         if (isNaN(parseInt(termo))) {
-            sql = `SELECT * FROM produto p INNER JOIN categoria c ON p.fk_codigo_cat = c.codigo 
-                    WHERE prod_descricao LIKE ?`; 
-                    
+            sql = `SELECT * FROM produto p
+                   INNER JOIN categoria c ON p.fk_codigo_cat = c.codigo
+                   WHERE prod_descricao LIKE ?`;
             parametros = ['%' + termo + '%'];
         }
         else {
-            sql = sql = `SELECT * FROM produto p INNER JOIN categoria c ON p.fk_codigo_cat = c.codigo 
-                    WHERE prod_codigo = ?`;
+            sql = `SELECT * FROM produto p
+                   INNER JOIN categoria c ON p.fk_codigo_cat = c.codigo 
+                   WHERE prod_codigo = ?`
             parametros = [termo];
         }
         const [linhas, campos] = await conexao.execute(sql, parametros);
         let listaProdutos = [];
         for (const linha of linhas) {
-            const categoria = new Categoria(linha['fk_codigo_cat'], linha["descricao"]);
+            const categoria = new Categoria(linha['codigo'],linha["descricao"]);    
             const produto = new Produto(
                 linha['prod_codigo'],
                 linha['prod_descricao'],
@@ -112,7 +113,7 @@ export default class ProdutoDAO {
     async excluir(produto) {
         if (produto instanceof Produto) {
             const conexao = await conectar();
-            const sql = `DELETE FROM produto WHERE prod_codigo = ?`;
+            const sql = `DELETE FROM produto WHERE codigo = ?`;
             let parametros = [
                 produto.codigo
             ]; //dados do produto

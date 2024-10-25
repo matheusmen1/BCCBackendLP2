@@ -1,12 +1,13 @@
-import conectar from "./Conexao.js";
 import Categoria from "../Modelo/categoria.js";
+import conectar from "./Conexao.js";
+
 export default class CategoriaDAO{
 
     constructor(){
         this.init();
     }
-    async init(){
 
+    async init(){
         try{
             const conexao = await conectar();
             const sql = `
@@ -18,52 +19,68 @@ export default class CategoriaDAO{
             `;
             await conexao.execute(sql);
             await conexao.release();
+
         }
         catch(erro){
-            console.log("Erro ao iniciar a tabela categoria");
+            console.log("Erro ao iniciar a tabela categoria!");
         }
     }
+
     async gravar(categoria){
         if (categoria instanceof Categoria){
             const conexao = await conectar();
-            const sql = "INSERT INTO categoria(descricao) VALUES ?";
+            const sql = "INSERT INTO categoria(descricao) VALUES (?)";
             const parametros = [categoria.descricao];
-            const resultado = await conexao.execute(sql, parametros);
+            const resultado = await conexao.execute(sql,parametros);
             categoria.codigo = resultado[0].insertId;
             await conexao.release();
         }
-
     }
+    
     async editar(categoria){
         if (categoria instanceof Categoria){
             const conexao = await conectar();
-            const sql = "UPDATE categoria SET descricao = ?";
-            const parametros = [categoria.descricao];
-            const resultado = await conexao.execute(sql, parametros);
+            const sql = "UPDATE categoria SET descricao = ? WHERE codigo = ?";
+            const parametros = [categoria.descricao, categoria.codigo];
+            await conexao.execute(sql,parametros);
             await conexao.release();
         }
-
     }
+
     async excluir(categoria){
         if (categoria instanceof Categoria){
             const conexao = await conectar();
             const sql = "DELETE FROM categoria WHERE codigo = ?";
             const parametros = [categoria.codigo];
-            const resultado = await conexao.execute(sql, parametros);
+            await conexao.execute(sql,parametros);
             await conexao.release();
         }
     }
-    async consultar(categoria){
+
+    async consultar(termo){
+        let sql = "";
+        let parametros = [];
+        if (isNaN(parseInt(termo))) {
+            sql = "SELECT * FROM categoria WHERE descricao LIKE ? ORDER BY descricao";
+            parametros.push("%"+termo+"%");
+        }
+        else{
+            sql = "SELECT * FROM categoria WHERE codigo = ? ORDER BY descricao";
+            parametros.push(termo);
+        }
         const conexao = await conectar();
-        const sql = "SELECT * FROM categoria ORDER BY descricao";
-        const [registros, campos] = await conexao.query(sql);
-        let listaCategoria = [];
+        
+        const [registros, campos] = await conexao.query(sql, parametros);
+        let listaCategoria=[];
         for (const registro of registros){
             const categoria = new Categoria(registro['codigo'],
-                                            registro['descricao']
+                                            registro['descricao']    
             );
             listaCategoria.push(categoria);
         }
+
         return listaCategoria;
+
     }
+
 }

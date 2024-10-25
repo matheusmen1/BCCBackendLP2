@@ -9,7 +9,7 @@ export default class Produto{
     #qtdEstoque;
     #urlImagem;
     #dataValidade;
-    #categoria;
+    #categoria
 
     get codigo(){
         return this.#codigo;
@@ -66,25 +66,28 @@ export default class Produto{
     set dataValidade(novaData){
         this.#dataValidade = novaData;
     }
-    set categoria(categoria){
-        if (categoria instanceof Categoria)
-            this.#categoria = categoria;
+
+    get categoria(){
+        return this.#categoria
     }
-    get categoria()
-    {
-        return this.#categoria;
+
+    set categoria(novaCategoria){
+        if (novaCategoria instanceof Categoria){
+            this.#categoria = novaCategoria;
+        }
     }
+
     //construtor (criador de um produto)
     constructor(codigo=0, descricao="",precoCusto=0,precoVenda=0,qtdEstoque=0,
-                urlImagem="", dataValidade="", categoria= {}){
+                urlImagem="", dataValidade="", categoria={}){
         this.#codigo=codigo;
         this.#descricao=descricao;
         this.#precoCusto=precoCusto;
         this.#precoVenda=precoVenda;
         this.#qtdEstoque=qtdEstoque;
         this.#urlImagem=urlImagem;
-        this.#dataValidade=dataValidade;
-        this.#categoria = categoria;            
+        this.#dataValidade=dataValidade;            
+        this.#categoria = categoria;
     }
 
     //override do método toJSON

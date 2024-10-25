@@ -1,52 +1,61 @@
 import CategoriaDAO from "../Persistencia/categoriaDAO.js";
-export default class Categoria{
+
+export default class Categoria {
+    // Atributos privados usando a sintaxe #
     #codigo;
     #descricao;
 
+    // Construtor da classe
     constructor(codigo, descricao) {
-        this.#codigo = codigo;
-        this.#descricao = descricao;
+        this.#codigo = codigo;       // Atribuindo valor ao atributo privado
+        this.#descricao = descricao;  // Atribuindo valor ao atributo privado
     }
 
-    // Métodos get
-    getCodigo() {
+    // Método get para o atributo codigo
+    get codigo() {
         return this.#codigo;
     }
 
-    getNome() {
+    // Método set para o atributo codigo
+    set codigo(value) {
+        this.#codigo = value;
+    }
+
+    // Método get para o atributo descricao
+    get descricao() {
         return this.#descricao;
     }
 
-    // Métodos set
-    setCodigo(codigo) {
-        this.#codigo = codigo;
+    // Método set para o atributo descricao
+    set descricao(value) {
+        this.#descricao = value;
     }
 
-    setNome(descricao) {
-        this.#descricao = descricao;
-    }
-
-    // Método para converter a instância para JSON
+    // Método toJSON para conversão em JSON
     toJSON() {
-        return JSON.stringify({
+        return {
             codigo: this.#codigo,
             descricao: this.#descricao
-        });
+        };
     }
+
     async gravar(){
         const catDAO = new CategoriaDAO();
         await catDAO.gravar(this);
     }
+
     async editar(){
         const catDAO = new CategoriaDAO();
         await catDAO.editar(this);
     }
+
     async excluir(){
         const catDAO = new CategoriaDAO();
         await catDAO.excluir(this);
     }
-    async consultar(){
+
+    async consultar(termo){
         const catDAO = new CategoriaDAO();
-        return await catDAO.consultar(this);
+        return await catDAO.consultar(termo);
     }
 }

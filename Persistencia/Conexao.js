@@ -11,7 +11,6 @@ export default async function conectar(){
     }
     else{
         global.poolConexoes = await mysql.createPool({
-            // proteje as informações de eventuais vazamentos"""""""
             "host":process.env.IP_BANCO_DE_DADOS,
             "port":process.env.PORTA_BANCO_DE_DADOS,
             "database":process.env.BASE_DE_DADOS,
