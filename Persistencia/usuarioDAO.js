@@ -85,6 +85,7 @@ export default class UsuarioDAO {
                 linha['usu_codigo'],
                 linha['usu_nickname'],
                 linha['usu_senha'],
+                linha['usu_urlAvatar'],
                 linha['usu_previlegio']
             );
             listaUsuarios.push(usuario);
