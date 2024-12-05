@@ -15,7 +15,7 @@ export default class UsuarioDAO {
                 usu_codigo INT NOT NULL AUTO_INCREMENT,
                 usu_nickname VARCHAR(200) NOT NULL,
                 usu_senha VARCHAR(200) NOT NULL,
-                usu_urlAvatar VARCHAR(200) NOT NULL,
+                usu_urlAvatar VARCHAR(250) NOT NULL,
                 usu_previlegio VARCHAR(200) NOT NULL,
                 CONSTRAINT pk_usuario PRIMARY KEY(usu_codigo)
               
