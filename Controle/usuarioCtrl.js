@@ -3,7 +3,7 @@ import Usuario from "../Modelo/usuario.js";
 
 export default class UsuarioCtrl{
 
-    incluir(requisicao, resposta){
+    gravar(requisicao, resposta){
         //preparar o destinatário que a resposta estará no formato JSON
         resposta.type("application/json");
         //Verificando se o método da requisição é POST e conteúdo é JSON
@@ -54,7 +54,7 @@ export default class UsuarioCtrl{
 
     }
 
-    alterar(requisicao, resposta){
+    editar(requisicao, resposta){
         //preparar o destinatário que a resposta estará no formato JSON
         resposta.type("application/json");
         //Verificando se o método da requisição é POST e conteúdo é JSON
@@ -70,7 +70,7 @@ export default class UsuarioCtrl{
             if (codigo > 0 && nickname && senha && urlAvatar && previlegio)
             {
                 const usuario = new Usuario(codigo,nickname, senha, urlAvatar, previlegio);
-                urlAvatar.alterar().then(()=>{
+                usuario.alterar().then(()=>{
                     resposta.status(200).json({
                         "status":true,
                         "mensagem":"usuario alterada com sucesso!",
