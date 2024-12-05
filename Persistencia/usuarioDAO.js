@@ -74,7 +74,7 @@ export default class UsuarioDAO {
         }
         else {
             sql = `SELECT * FROM usuario
-                   WHERE prod_codigo = ?`
+                   WHERE usu_codigo = ?`
             parametros = [termo];
         }
         const [linhas, campos] = await conexao.execute(sql, parametros);
