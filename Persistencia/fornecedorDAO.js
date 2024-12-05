@@ -31,7 +31,7 @@ export default class FornecedorDAO {
         }
     }
 
-    async incluir(fornecedor) {
+    async gravar(fornecedor) {
         if (fornecedor instanceof Fornecedor) {
             const conexao = await conectar();
             const sql = `INSERT INTO fornecedor(forn_nome,forn_cep,forn_cidade,forn_cnpj,forn_endereco,forn_telefone)
@@ -51,7 +51,7 @@ export default class FornecedorDAO {
             await conexao.release(); //libera a conexão
         }
     }
-    async alterar(fornecedor) {
+    async editar(fornecedor) {
         if (fornecedor instanceof Fornecedor) {
             const conexao = await conectar();
             const sql = `UPDATE fornecedor SET forn_nome=?,forn_cep=?,forn_cidade=?,forn_cnpj=?,forn_endereco=?,forn_telefone=?
