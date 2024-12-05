@@ -15,7 +15,7 @@ export default class FornecedorCtrl{
             const endereco = requisicao.body.endereco
             const telefone = requisicao.body.telefone
             //pseudo validação
-            if (nome && cnpj && cidade && cpf && endereco && telefone)  
+            if (nome && cnpj && cidade && cep && endereco && telefone)  
             {
                 const fornecedor = new Fornecedor(0,nome, cep, cidade, cnpj, endereco, telefone);
                 fornecedor.gravar()
@@ -118,7 +118,7 @@ export default class FornecedorCtrl{
             {
               
                 const fornecedor = new Fornecedor(codigo);
-                categoria.excluir()
+                fornecedor.excluir()
                 .then(()=>{
                     resposta.status(200).json({
                         "status":true,

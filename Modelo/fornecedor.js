@@ -1,5 +1,5 @@
 import e from "cors";
-import FornecedorDAO from "../Persistencia/fornecedorDAO";
+import FornecedorDAO from "../Persistencia/fornecedorDAO.js";
 
 export default class Fornecedor {
     // Atributos privados usando a sintaxe #

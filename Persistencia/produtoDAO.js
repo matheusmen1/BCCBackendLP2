@@ -25,7 +25,7 @@ export default class ProdutoDAO {
                 fk_codigo_cat INT NOT NULL,
                 fk_codigo_forn INT NOT NULL,
                 CONSTRAINT pk_produto PRIMARY KEY(prod_codigo),
-                CONSTRAINT fk_categoria FOREIGN KEY(fk_codigo_cat) REFERENCES categoria(codigo)
+                CONSTRAINT fk_categoria FOREIGN KEY(fk_codigo_cat) REFERENCES categoria(codigo),
                 CONSTRAINT fk_fornecedor FOREIGN KEY(fk_codigo_forn) REFERENCES fornecedor(forn_codigo) 
             )
         `;
