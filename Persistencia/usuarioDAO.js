@@ -1,5 +1,6 @@
 //DAO - Data Access Object
 import Usuario from "../Modelo/usuario.js";
+import conectar from "./Conexao.js";
 export default class UsuarioDAO {
     constructor() {
         this.init();
