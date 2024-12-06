@@ -77,7 +77,7 @@ export default class PrivilegioDAO{
             const privilegio = new Privilegio(registro['pri_codigo'],
                                             registro['pri_descricao']    
             );
-            listaPrivilegio.push(categoria);
+            listaPrivilegio.push(privilegio);
         }
         
         return listaPrivilegio;
