@@ -19,8 +19,8 @@ export default class UsuarioDAO {
                 usu_urlAvatar VARCHAR(250) NOT NULL,
                 usu_previlegio VARCHAR(200) NOT NULL,
                 fk_codigo_pri INT NOT NULL,
-                CONSTRAINT pk_usuario PRIMARY KEY(usu_codigo)
-                CONSTRAINT fk_codigo_pri FOREIGN KEY(fk_codigo_pri) REFERENCES privilegio(pri_codigo),
+                CONSTRAINT pk_usuario PRIMARY KEY(usu_codigo),
+                CONSTRAINT fk_codigo_pri FOREIGN KEY(fk_codigo_pri) REFERENCES privilegio(pri_codigo)
               
             )
         `;
