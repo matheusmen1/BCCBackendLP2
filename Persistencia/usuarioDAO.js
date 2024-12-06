@@ -17,7 +17,6 @@ export default class UsuarioDAO {
                 usu_nickname VARCHAR(200) NOT NULL,
                 usu_senha VARCHAR(200) NOT NULL,
                 usu_urlAvatar VARCHAR(250) NOT NULL,
-                usu_previlegio VARCHAR(200) NOT NULL,
                 fk_codigo_pri INT NOT NULL,
                 CONSTRAINT pk_usuario PRIMARY KEY(usu_codigo),
                 CONSTRAINT fk_codigo_pri FOREIGN KEY(fk_codigo_pri) REFERENCES privilegio(pri_codigo)
@@ -92,7 +91,6 @@ export default class UsuarioDAO {
                 linha['usu_nickname'],
                 linha['usu_senha'],
                 linha['usu_urlAvatar'],
-                linha['usu_previlegio'],
                 privilegio
             );
             listaUsuarios.push(usuario);
