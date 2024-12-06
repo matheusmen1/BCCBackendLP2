@@ -1,5 +1,6 @@
 //DAO - Data Access Object
 import Usuario from "../Modelo/usuario.js";
+import Privilegio from "../Modelo/privilegio.js";
 import conectar from "./Conexao.js";
 export default class UsuarioDAO {
     constructor() {
@@ -17,7 +18,9 @@ export default class UsuarioDAO {
                 usu_senha VARCHAR(200) NOT NULL,
                 usu_urlAvatar VARCHAR(250) NOT NULL,
                 usu_previlegio VARCHAR(200) NOT NULL,
+                fk_codigo_pri INT NOT NULL,
                 CONSTRAINT pk_usuario PRIMARY KEY(usu_codigo)
+                CONSTRAINT fk_codigo_pri FOREIGN KEY(fk_codigo_pri) REFERENCES privilegio(pri_codigo),
               
             )
         `;
@@ -32,14 +35,14 @@ export default class UsuarioDAO {
     async incluir(usuario) {
         if (usuario instanceof Usuario) {
             const conexao = await conectar();
-            const sql = `INSERT INTO usuario(usu_nickname, usu_senha, usu_urlAvatar, usu_previlegio)
+            const sql = `INSERT INTO usuario(usu_nickname, usu_senha, usu_urlAvatar, fk_codigo_pri)
                 values(?,?,?,?)
             `;
             let parametros = [
                 usuario.nickname,
                 usuario.senha,
                 usuario.urlAvatar,
-                usuario.previlegio
+                usuario.privilegio.codigo
             ]; //dados do produto
             const resultado = await conexao.execute(sql, parametros);
             usuario.codigo = resultado[0].insertId;
@@ -49,14 +52,14 @@ export default class UsuarioDAO {
     async alterar(usuario) {
         if (usuario instanceof Usuario) {
             const conexao = await conectar();
-            const sql = `UPDATE usuario SET usu_nickname=?,usu_senha=?,usu_urlAvatar=?,usu_previlegio=?
+            const sql = `UPDATE usuario SET usu_nickname=?,usu_senha=?,usu_urlAvatar=?,fk_codigo_pri=?
                 WHERE usu_codigo = ?
             `;
             let parametros = [
                 usuario.nickname,
                 usuario.senha,
                 usuario.urlAvatar,
-                usuario.previlegio,
+                usuario.privilegio.codigo,
                 usuario.codigo
             ]; //dados do produto
             await conexao.execute(sql, parametros);
@@ -70,23 +73,27 @@ export default class UsuarioDAO {
         let parametros = [];
         if (isNaN(parseInt(termo))) {
             sql = `SELECT * from usuario
+                   INNER JOIN privilegio c ON p.fk_codigo_pri = c.pri_codigo
                    WHERE usu_nickname LIKE ?`;
             parametros = ['%' + termo + '%'];
         }
         else {
             sql = `SELECT * FROM usuario
+                    INNER JOIN privilegio c ON p.fk_codigo_pri = c.pri_codigo
                    WHERE usu_codigo = ?`
             parametros = [termo];
         }
         const [linhas, campos] = await conexao.execute(sql, parametros);
         let listaUsuarios = [];
         for (const linha of linhas) {
+            const privilegio = new Privilegio(linha['pri_codigo'], linha['pri_descricao']);
             const usuario = new Usuario(
                 linha['usu_codigo'],
                 linha['usu_nickname'],
                 linha['usu_senha'],
                 linha['usu_urlAvatar'],
-                linha['usu_previlegio']
+                linha['usu_previlegio'],
+                privilegio
             );
             listaUsuarios.push(usuario);
         }

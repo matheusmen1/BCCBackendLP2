@@ -1,4 +1,5 @@
 //É a classe responsável por traduzir requisições HTTP e produzir respostas HTTP
+import Privilegio from "../Modelo/privilegio.js";
 import Usuario from "../Modelo/usuario.js";
 
 export default class UsuarioCtrl{
@@ -11,36 +12,53 @@ export default class UsuarioCtrl{
             const nickname = requisicao.body.nickname;
             const senha = requisicao.body.senha;
             const urlAvatar = requisicao.body.urlAvatar;
-            const previlegio = requisicao.body.previlegio;
-
-            //pseudo validação
-            if (nickname && senha && urlAvatar && previlegio)
-            {
-                const usuario = new Usuario(0,nickname, senha, urlAvatar, previlegio);
-                usuario.incluir()
-                .then(()=>{
-                    resposta.status(200).json({
-                        "status":true,
-                        "mensagem":"usuario adicionada com sucesso!",
-                        "codigo": usuario.codigo
+            const privilegio = requisicao.body.privilegio;
+            const pri = new Privilegio(privilegio.codigo);
+            pri.consultar(privilegio.codigo).then((listaPrivilegio) =>{
+                if (listaPrivilegio.length > 0)
+                {
+                    if (nickname && senha && urlAvatar && privilegio.codigo > 0)
+                        {
+                            const usuario = new Usuario(0,nickname, senha, urlAvatar, pri);
+                            usuario.incluir()
+                            .then(()=>{
+                                resposta.status(200).json({
+                                    "status":true,
+                                    "mensagem":"usuario adicionada com sucesso!",
+                                    "codigo": usuario.codigo
+                                });
+                            })
+                            .catch((erro)=>{
+                                resposta.status(500).json({
+                                    "status":false,
+                                    "mensagem":"Não foi possível incluir a usuario: " + erro.message
+                                });
+                            });
+                        }
+                        else
+                        {
+                            resposta.status(400).json(
+                                {
+                                    "status":false,
+                                    "mensagem":"Informe corretamente todos os dados de uma usuario conforme documentação da API."
+                                }
+                            );
+                        }
+                }
+                else{
+                    resposta.status(400).json({
+                        "status": false,
+                        "mensagem": "o privilegio informado não existe!"
                     });
-                })
-                .catch((erro)=>{
-                    resposta.status(500).json({
-                        "status":false,
-                        "mensagem":"Não foi possível incluir a usuario: " + erro.message
-                    });
+                }
+            }).catch((erro)=>{
+                resposta.status(500).json({
+                    "status": false,
+                    "mensagem": "Não foi possível validar o privilegio" +erro.message
                 });
-            }
-            else
-            {
-                resposta.status(400).json(
-                    {
-                        "status":false,
-                        "mensagem":"Informe corretamente todos os dados de uma usuario conforme documentação da API."
-                    }
-                );
-            }
+                
+            });
+              
 
         }
         else
@@ -64,34 +82,37 @@ export default class UsuarioCtrl{
             const nickname = requisicao.body.nickname;
             const senha = requisicao.body.senha;
             const urlAvatar = requisicao.body.urlAvatar;
-            const previlegio = requisicao.body.previlegio;
-            
-            //pseudo validação
-            if (codigo > 0 && nickname && senha && urlAvatar && previlegio)
-            {
-                const usuario = new Usuario(codigo,nickname, senha, urlAvatar, previlegio);
-                usuario.alterar().then(()=>{
-                    resposta.status(200).json({
-                        "status":true,
-                        "mensagem":"usuario alterada com sucesso!",
-                    });
-                })
-                .catch((erro)=>{
-                    resposta.status(500).json({
-                        "status":false,
-                        "mensagem":"Não foi possível alterar a usuario: " + erro.message
-                    });
-                });
-            }
-            else
-            {
-                resposta.status(400).json(
-                    {
-                        "status":false,
-                        "mensagem":"Informe corretamente todos os dados de uma usuario conforme documentação da API."
-                    }
-                );
-            }
+            const privilegio = requisicao.body.privilegio;
+            const pri = new Privilegio(privilegio.codigo);
+            pri.consultar(privilegio.codigo).then((listaPrivilegio)=>{
+                if (listaPrivilegio.length > 0){
+                    if (codigo > 0 && nickname && senha && urlAvatar && privilegio.codigo > 0)
+                        {
+                            const usuario = new Usuario(codigo,nickname, senha, urlAvatar, pri);
+                            usuario.alterar().then(()=>{
+                                resposta.status(200).json({
+                                    "status":true,
+                                    "mensagem":"usuario alterada com sucesso!",
+                                });
+                            })
+                            .catch((erro)=>{
+                                resposta.status(500).json({
+                                    "status":false,
+                                    "mensagem":"Não foi possível alterar a usuario: " + erro.message
+                                });
+                            });
+                        }
+                        else
+                        {
+                            resposta.status(400).json(
+                                {
+                                    "status":false,
+                                    "mensagem":"Informe corretamente todos os dados de uma usuario conforme documentação da API."
+                                }
+                            );
+                        }
+                }
+            })        
         }
         else
         {

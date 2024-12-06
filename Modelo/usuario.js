@@ -1,4 +1,4 @@
-
+import Privilegio from "./privilegio.js";
 import UsuarioDAO from "../Persistencia/usuarioDAO.js";
 export default class Usuario{
     //atributos privados
@@ -6,7 +6,7 @@ export default class Usuario{
     #nickname;
     #senha;
     #urlAvatar;
-    #previlegio;
+    #privilegio;
 
     get codigo(){
         return this.#codigo;
@@ -40,21 +40,22 @@ export default class Usuario{
     {
         this.#urlAvatar = value;
     }
-    get previlegio()
+    get privilegio()
     {
-        return this.#previlegio;
+        return this.#privilegio;
     }
-    set previlegio(value)
+    set privilegio(novoPrivilegio)
     {
-        this.#previlegio = value;
+        if (novoPrivilegio instanceof Privilegio)
+             this.#privilegio = novoPrivilegio;
     }
     //construtor (criador de um produto)
-    constructor(codigo=0, nickname="", senha="", urlAvatar="", previlegio=""){
+    constructor(codigo=0, nickname="", senha="", urlAvatar="", privilegio={}){
         this.#codigo=codigo;
         this.#nickname =nickname;
         this.#senha = senha;
         this.#urlAvatar = urlAvatar;
-        this.#previlegio = previlegio;
+        this.#privilegio = privilegio;
     }
 
     //override do método toJSON
@@ -66,7 +67,7 @@ export default class Usuario{
             "nickname":this.#nickname,
             "senha":this.#senha,
             "urlAvatar":this.#urlAvatar,
-            "previlegio":this.#previlegio
+            "privilegio":this.#privilegio
         }
     }
 
