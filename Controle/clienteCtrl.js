@@ -60,7 +60,7 @@ export default class ClienteCtrl{
         if ((requisicao.method == 'PUT' || requisicao.method == 'PATCH') && requisicao.is("application/json")){
             //o código será extraída da URL (padrão REST)
             const codigo = requisicao.params.codigo;
-            const nome = requisicao.body.descricao;
+            const nome = requisicao.body.nome;
             const endereco = requisicao.body.endereco;
             const cidade = requisicao.body.cidade;
             const cep = requisicao.body.cep;
