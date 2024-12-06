@@ -68,18 +68,18 @@ export default class Cliente
         await clienteDAO.gravar(this);
     }
 
-    async consultar(termo){
-        const clienteDAO = new ClienteDAO();
-        return await clienteDAO.consultar(termo);
-    }
-
-    async excluir(){
-        const clienteDAO = new ClienteDAO();
-        await clienteDAO.excluir(this);
-    }
-
     async alterar(){
         const clienteDAO = new ClienteDAO();
         await clienteDAO.alterar(this);
     }
+    
+    async excluir(){
+        const clienteDAO = new ClienteDAO();
+        await clienteDAO.excluir(this);
+    }
+    async consultar(termo){
+        const clienteDAO = new ClienteDAO();
+        return await clienteDAO.consultar(termo);
+    }
+    
 }
